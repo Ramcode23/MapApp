@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MapService } from '.';
 import { PlacesApiClient } from '../api/index';
 import { Feature, PlacesResponse } from '../interfaces/places';
 
@@ -16,7 +17,9 @@ export class PlacesService {
    return  !!this.userLocaction;
  }
 
-  constructor( private placesIp:PlacesApiClient) {
+  constructor( private placesIp:PlacesApiClient,
+    private mapService:MapService
+    ) {
     this.getUserLocation();
    }
 public  async getUserLocation():Promise<[number,number]>{
@@ -55,6 +58,8 @@ this.placesIp.get<PlacesResponse>(`/${query}.json`,{
 
   this.places = resp.features;
   this.isLoandingPlaces = false;
+
+  this.mapService.createMakerFromPlaces(this.places,this.userLocaction!);
 });
 }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LngLatLike, Map, Marker, Popup } from 'mapbox-gl';
+import { LngLatBounds, LngLatLike, Map, Marker, Popup } from 'mapbox-gl';
 import { Feature } from '../interfaces/places';
 ;
 
@@ -28,14 +28,14 @@ export class MapService {
     });
   }
 
-  createMakerFromPlaces(places: Feature[]) {
+  createMakerFromPlaces(places: Feature[],userLocation:[number,number]) {
     if (!this.map) throw new Error('Map is not ready');
     const newMarkers = [];
     for (const place of places) {
       const [lng, lat] = place.center
       const popup = new Popup()
         .setHTML(`
-       h6>${place.text}</h6>
+      <h6>${place.text}</h6>
        <span>${place.place_name}</span>`);
 
       this.markers.forEach(marker => marker.remove());
@@ -46,5 +46,10 @@ export class MapService {
       newMarkers.push(newMarker)
     }
 this.markers=newMarkers;
+if(places.length===0) return;
+const bounds= new  LngLatBounds()
+newMarkers.forEach(marker=>bounds.extend(marker.getLngLat()));
+bounds.extend(userLocation);
+this.map.fitBounds(bounds,{ padding:200});
   }
 }
