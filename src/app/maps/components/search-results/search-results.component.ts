@@ -27,6 +27,11 @@ public selectedId='';
     this.mapService.flyTo([lng,lat]);
   }
 
-
+  getDirections (place:Feature){
+    if(!this.placesServices.userLocaction) throw Error('There not userLocation');
+    const start= this.placesServices.userLocaction;
+    const end=place.center as [number,number];
+    this.mapService.getRouteBetweenPonts(start,end);
+  }
 
 }

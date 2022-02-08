@@ -13,6 +13,7 @@ class="alert alert-primary mt-2 text-center">
     <h6> {{place.text_en}}</h6>
     <p> {{place.place_name}}</p>
   <button class="btn btn-sm "
+  (click)="getDirections(place)"
   [ngClass]="(place.id==selectedId)?'btn-outline-light':'btn-outline-primary'"
 
   > Addresses</button>
